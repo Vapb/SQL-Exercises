@@ -49,10 +49,12 @@ SELECT DISTINCT CITY
 FROM STATION
 WHERE ID % 2 = 0;
 
+
 -- Weather Observation Station 4
 -- Find the difference between the total number of CITY entries in the table and the number of distinct CITY entries in the table. 
 SELECT count(CITY) - count(DISTINCT CITY)
 FROM STATION;
+
 
 --Weather Observation Station 6
 -- Query the list of CITY names starting with vowels (i.e., a, e, i, o, or u) from STATION. Your result cannot contain duplicates.
@@ -60,6 +62,7 @@ SELECT DISTINCT CITY
 FROM STATION
 WHERE LEFT(CITY,1) 
   IN ('a','i','e','o','u');
+
 
 -- Weather Observation Station 7
 -- Query the list of CITY names ending with vowels (a, e, i, o, u) from STATION. Your result cannot contain duplicates.
@@ -129,3 +132,111 @@ SELECT Name
 FROM STUDENTS
 WHERE Marks > 75
 ORDER BY right(Name,3), ID ASC;
+
+
+-- Weather Observation Station 5
+-- Query the two cities in STATION with the shortest and longest CITY names, as well as their respective lengths (i.e.: number of characters in the name). If there is more than one smallest or largest city, choose the one that comes first when ordered alphabetically. 
+SELECT city, length(city)
+FROM station
+ORDER BY length(city),city ASC
+LIMIT 1;
+SELECT city, length(city)
+FROM station
+ORDER BY length(city) DESC
+LIMIT 1;
+
+
+-- Weather Observation Station 11
+-- Query the list of CITY names from STATION that either do not start with vowels or do not end with vowels. Your result cannot contain duplicates
+SELECT DISTINCT CITY 
+FROM STATION
+WHERE CITY REGEXP '^[^aeiou]|[^aeiou]$';
+
+
+--
+--
+SELECT name
+FROM Employee
+ORDER BY name ASC;
+
+
+-- Employee Salaries
+-- Write a query that prints a list of employee names (i.e.: the name attribute) for employees in Employee having a salary greater than per month who have been employees for less than months. Sort your result by ascending employee_id.
+SELECT name
+FROM Employee
+WHERE salary > 2000
+AND months < 10
+ORDER BY employee_id ASC;
+
+
+-- Type of Triangle
+-- Write a query identifying the type of each record in the TRIANGLES table using its three side lengths. Output one of the following statements for each record in the table:
+SELECT 
+    CASE
+        WHEN (A >= (B + C)) OR (B >= (A + C)) OR (C >= (A + B)) THEN 'Not A Triangle'
+        WHEN (A = B AND B = C) THEN 'Equilateral'
+        WHEN (A = B AND B != C) OR (B = C AND A != C) OR (A = C AND B != C) THEN 'Isosceles'
+        ELSE 'Scalene'
+    END
+FROM TRIANGLES;
+
+
+-- Revising Aggregations - The Count Function
+-- Query a count of the number of cities in CITY having a Population larger than . 
+SELECT count(*)
+FROM CITY
+WHERE POPULATION > 100000;
+
+
+-- Average Population
+-- Query the average population for all cities in CITY, rounded down to the nearest integer.
+SELECT ROUND(AVG(POPULATION))
+FROM CITY;
+
+
+-- Population Census 
+-- Given the CITY and COUNTRY tables, query the sum of the populations of all cities where the CONTINENT is 'Asia'.
+SELECT sum(CITY.POPULATION)
+FROM CITY
+INNER JOIN COUNTRY ON CITY.COUNTRYCODE = COUNTRY.CODE
+WHERE COUNTRY.CONTINENT = 'Asia';
+
+
+-- Revising Aggregations - The Sum Function
+-- Query the total population of all cities in CITY where District is California. 
+SELECT sum(POPULATION)
+FROM CITY
+WHERE DISTRICT = 'California' ;
+
+
+-- Japan Population
+-- Query the sum of the populations for all Japanese cities in CITY. The COUNTRYCODE for Japan is JPN.
+SELECT sum(POPULATION)
+FROM CITY
+WHERE COUNTRYCODE = 'JPN';
+
+
+-- Population Density Difference
+-- Query the difference between the maximum and minimum populations in CITY.
+SELECT max(POPULATION) - min(POPULATION)
+FROM CITY;
+
+
+-- The Blunder
+-- Samantha was tasked with calculating the average monthly salaries for all employees in the EMPLOYEES table, but did not realize her keyboard's key was broken until after completing the calculation. She wants your help finding the difference between her miscalculation (using salaries with any zeros removed), and the actual average salary.
+SELECT CEILING(avg(SALARY) - avg(replace(SALARY,0,'')))
+FROM EMPLOYEES;
+
+
+-- Top Earners
+-- We define an employee's total earnings to be their monthly worked, and the maximum total earnings to be the maximum total earnings for any employee in the Employee table. Write a query to find the maximum total earnings for all employees as well as the total number of employees who have maximum total earnings. Then print these values as space-separated integers.
+SELECT (salary * months), count(*)
+FROM EMPLOYEE
+WHERE (salary * months) = (SELECT MAX(salary * months) FROM EMPLOYEE)
+GROUP BY (salary * months);
+
+SELECT (salary * months), count(*)
+FROM EMPLOYEE 
+GROUP BY 1 
+ORDER BY earnings desc
+LIMIT 1;
