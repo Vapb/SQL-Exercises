@@ -250,3 +250,59 @@ FROM EMPLOYEE
 GROUP BY 1 
 ORDER BY earnings desc
 LIMIT 1;
+
+
+-- Weather Observation Station 2
+--The sum of all values in LAT_N rounded to a scale of decimal places.
+-- The sum of all values in LONG_W rounded to a scale of decimal places.
+SELECT round(sum(LAT_N),2), round(sum(LONG_W),2) 
+FROM STATION;
+
+
+-- Weather Observation Station 13
+-- Query the sum of Northern Latitudes (LAT_N) from STATION having values greater than and less than . Truncate your answer to decimal places
+SELECT round(sum(LAT_N),4)
+FROM STATION
+WHERE LAT_N > 38.7880 AND LAT_N < 137.2345;
+
+
+-- Weather Observation Station 14
+-- Query the greatest value of the Northern Latitudes (LAT_N) from STATION that is less than . Truncate your answer to decimal places.
+SELECT round(max(LAT_N), 4) 
+FROM STATION
+WHERE LAT_N < 137.2345;
+
+
+-- Weather Observation Station 15
+-- Query the Western Longitude (LONG_W) for the largest Northern Latitude (LAT_N) in STATION that is less than . Round your answer to decimal places.
+SELECT round(LONG_W, 4)
+FROM STATION
+WHERE LAT_N < 137.2345
+ORDER BY LAT_N DESC
+LIMIT 1;
+
+SELECT round(LONG_W, 4)
+FROM STATION 
+WHERE LAT_N = (SELECT MAX(LAT_N) FROM STATION WHERE LAT_N < LAT_N < 137.2345);
+
+
+-- Weather Observation Station 16
+-- Query the smallest Northern Latitude (LAT_N) from STATION that is greater than . Round your answer to decimal places.
+SELECT round(MIN(LAT_N), 4) 
+FROM STATION
+WHERE LAT_N > 38.7780;
+
+
+-- Weather Observation Station 17
+-- Query the Western Longitude (LONG_W)where the smallest Northern Latitude (LAT_N) in STATION is greater than . Round your answer to decimal places.
+SELECT round(LONG_W, 4)
+FROM STATION 
+WHERE LAT_N = (SELECT min(LAT_N) FROM STATION WHERE LAT_N > 38.7780);
+
+
+-- African Cities (Basic Join)
+-- Given the CITY and COUNTRY tables, query the names of all cities where the CONTINENT is 'Africa'. 
+SELECT CITY.NAME
+FROM CITY
+    INNER JOIN COUNTRY ON CITY.COUNTRYCODE = COUNTRY.CODE
+WHERE COUNTRY.CONTINENT = 'Africa';
