@@ -306,3 +306,43 @@ SELECT CITY.NAME
 FROM CITY
     INNER JOIN COUNTRY ON CITY.COUNTRYCODE = COUNTRY.CODE
 WHERE COUNTRY.CONTINENT = 'Africa';
+
+
+-- Average Population of Each Continent
+-- Given the CITY and COUNTRY tables, query the names of all the continents (COUNTRY.Continent) and their respective average city populations (CITY.Population) rounded down to the nearest integer.
+SELECT COUNTRY.CONTINENT, floor(avg(CITY.POPULATION))
+FROM CITY
+  INNER JOIN COUNTRY ON CITY.COUNTRYCODE = COUNTRY.CODE
+GROUP BY COUNTRY.CONTINENT;
+
+
+-- The PADS
+-- Query an alphabetically ordered list of all names in OCCUPATIONS, immediately followed by the first letter of each profession as a parenthetical (i.e.: enclosed in parentheses). For example: AnActorName(A), ADoctorName(D), AProfessorName(P), and ASingerName(S). 
+-- Query the number of ocurrences of each occupation in OCCUPATIONS. Sort the occurrences in ascending order, and output them in the following format: 
+SELECT concat( NAME, '(', LEFT(OCCUPATION,1), ')')
+FROM OCCUPATIONS
+ORDER BY NAME;
+
+SELECT CONCAT('There are a total of ', COUNT(*),' ',LOWER(OCCUPATION),'s.')
+FROM OCCUPATIONS
+GROUP BY OCCUPATION
+ORDER BY COUNT(*) ,OCCUPATION;
+
+
+-- Weather Observation Station 18
+-- Consider and to be two points on a 2D plane.
+-- Query the Manhattan Distance between points and and round it to a scale of decimal places.
+SELECT ROUND(
+  (MAX(LAT_N) - MIN(LAT_N)) +
+  (MAX(LONG_W) - MIN(LONG_W)),4)
+FROM STATION;
+
+
+-- Weather Observation Station 19
+-- Consider and to be two points on a 2D plane where are the respective minimum and maximum values of Northern Latitude (LAT_N) and are the respective minimum and maximum values of Western Longitude (LONG_W) in STATION. 
+SELECT ROUND(
+    SQRT(
+        POWER((MAX(LAT_N) - MIN(LAT_N)),2) +
+        POWER((MAX(LONG_W) - MIN(LONG_W)),2)
+        ),4)
+FROM STATION;
