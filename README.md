@@ -1,4 +1,4 @@
 # SQL-Exercises
 HackerRank BasicSQL 100%
-HackerRank IntermediateSQL 0%
+HackerRank IntermediateSQL 20%
 HackerRank AdvancedSQL 0%
