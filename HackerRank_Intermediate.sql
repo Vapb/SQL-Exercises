@@ -61,3 +61,24 @@ HAVING counter = (
     GROUP BY tmp.cnt
     HAVING count(*) = 1)
 ORDER BY counter DESC, id;
+
+
+-- New Companies
+-- Given the table schemas below, write a query to print the company_code, founder name, total number of lead managers, total number of senior managers, total number of managers, and total number of employees. Order your output by ascending company_code.
+SELECT C.company_code, 
+       C.founder,
+       COUNT(DISTINCT(L.lead_manager_code)),
+       COUNT(DISTINCT(S.senior_manager_code)),
+       COUNT(DISTINCT(M.manager_code)),
+       COUNT(DISTINCT(E.employee_code))
+FROM Company as C
+INNER JOIN Lead_Manager as L ON C.company_code =  L.company_code
+INNER JOIN Senior_Manager as S ON C.company_code =  S.company_code
+INNER JOIN Manager as M ON C.company_code =  M.company_code
+INNER JOIN Employee as E ON C.company_code =  E.company_code
+GROUP BY C.company_code, C.founder
+ORDER BY C.company_code;
+
+
+--
+--
