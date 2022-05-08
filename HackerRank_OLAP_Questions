@@ -1,3 +1,5 @@
+## OLAP QUESTIONS
+
 Which of these helps OLAP speed up queries, in terms of performance?
 * Aggregation
 
@@ -16,3 +18,50 @@ Which of these are alternate names for an OLAP Cube? The options in the top row 
 Which of these provides a total view of the organization?
 * Data Warehousing
 
+## Relational Algebra
+
+Set A = {1,2,3,4,5,6}
+Set B = {2,3,4,5,6,7,8}
+
+How many elements are present in A union B ?
+* R: 8
+
+How many elements are present in A intersection B ?
+* R: 5
+
+How many elements are present in A - B ?
+* R: 1
+
+What is the total number of ordered pairs present in the Cartesian Product A X B?
+* R: 42
+
+Consider the following data table named Student
+What is the count of rows returned in the following relational selection?
+σ(Number<3000)(Student)?
+* R: 2
+
+What is the count of attributes (columns) returned in the following projection?
+π(Name, Number)(Student)
+* R: 2
+
+What is the count of rows returned in the following join operation?
+Student ⊳⊲(Number=ID) Teaching Assistants
+* R: 2
+
+Which is a join condition contains an equality operator?
+* R: Equijoins 
+
+In precedence of set operators the expression is evaluated from:
+* R: Left to right
+
+Using which language can a user request information from a database ?
+* R: Query
+
+Which one of the following is a procedural language ?
+* R: Relational algebra
+
+The_____ operation allows the combining of two relations by merging pairs of tuples, one from each relation, into a single tuple.
+* R: Join 
+
+The result which operation contains all pairs of tuples from the two relations, regardless of whether their attribute values match.
+* R: Cartesian product 
