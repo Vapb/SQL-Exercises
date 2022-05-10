@@ -94,54 +94,79 @@ INNER JOIN GRADES AS G ON S.Marks BETWEEN G.Min_Mark AND G.Max_Mark
 ORDER BY G.Grade DESC, S.Name ASC;
 
 
+-- Top Competitors
+-- Julia just finished conducting a coding contest, and she needs your help assembling the leaderboard! Write a query to print the respective hacker_id and name of hackers who achieved full scores for more than one challenge. Order your output in descending order by the total number of challenges in which the hacker earned a full score. If more than one hacker received full scores in same number of challenges, then sort them by ascending hacker_id.
+SELECT Hackers.hacker_id, Hackers.name
+FROM Submissions
+INNER JOIN Hackers ON Hackers.hacker_id = Submissions.hacker_id
+INNER JOIN Challenges ON Challenges.challenge_id = Submissions.challenge_id
+INNER JOIN Difficulty ON Difficulty.difficulty_level = Challenges.difficulty_level
+WHERE Submissions.score = Difficulty.score
+GROUP BY Hackers.hacker_id, Hackers.name
+HAVING count(*) > 1
+ORDER BY count(*) DESC, Hackers.hacker_id;
 
 
--- Some interesting questions that i
---- Given the product and invoice details for products at an online store, find all the products that were not sold. For each such product, display its SKU and product name. Order the result by SKU, ascending.
-select 'customer' as category,
-        c.id as id, customer_name as name
-from customer c
-left join invoice i on c.id = i.customer_id
-where i.id is null 
-
--- Query all customers who spent bellow 0.25 of average
-SELECT c.customer_name, CAST((total_price) as decimal(20,6))
-FROM customer c
-INNER JOIN invoice i on c.id = i.customer_id
-GROUP BY c.customer_name
-HAVING total_price <= (SELECT AVG(total_price) * 0.25 
-                       FROM invoice)
-ORDER BY total_price DESC;
+-- Ollivander's Inventory
+-- Write a query to print the id, age, coins_needed, and power of the wands that Ron's interested in, sorted in order of descending power. If more than one wand has same power, sort the result in order of descending age.
+select w.id, p.age, w.coins_needed, w.power
+from Wands as w 
+join Wands_Property as p on (w.code = p.code) 
+where p.is_evil = 0 
+and w.coins_needed = (select min(coins_needed)
+                      from Wands as w1 
+                      join Wands_Property as p1 on (w1.code = p1.code)
+                      where w1.power = w.power and p1.age = p.age) 
+order by w.power desc, p.age desc;
 
 
--- Bussiness Expansion/
--- As part of business expansion efforts at a company, your help is needed to find all pairs of customers and agents who have been in contact more than once. For each such pair, display the user id, first name, and last name, and the customer id, name, and the number of their contacts. Order the result by user id ascending.
-select us.id , us.first_name, us.last_name, cust.id,cust.customer_name,count() 
-from contact con 
-inner join user_account us on us.id=con.user_account_id 
-inner join customer cust on cust.id=con.customer_id 
-group by us.id , us.first_name, us.last_name, cust.id,cust.customer_name,cust.contact_person 
-having count()>1
+select w.id, p.age, w.coins_needed,w.power
+from wands w
+join wands_property p on p.code = w.code
+where (p.age,w.power,w.coins_needed) in (select p1.age,w1.power,min(w1.coins_needed)
+                                         from wands_property p1
+                                         join wands w1 on w1.code = p1.code
+                                         where p1.is_evil = 0
+                                         group by p1.age, w1.power)
+order by w.power desc, p.age desc
 
 
--- A business is analyzing data by country. For each country, display the country name, total number of invoices, and their average amount.
---Format the average as a floating-point number with 6 decimal places.
---Return only those countries where their average invoice amount is greater than the average invoice amount over all invoices.
-SELECT country_name, count(*), CAST(avg(invoice.total_price) as decimal(20,6))
-FROM country
-INNER JOIN city ON city.country_id = country.id
-INNER JOIN customer ON customer.city_id = city.id
-INNER JOIN invoice ON invoice.customer_id = customer.id
-GROUP BY country.country_name
-HAVING avg(invoice.total_price) > (SELECT avg(invoice.total_price) FROM invoice)
+-- Contest Leaderboard
+-- Write a query to print the hacker_id, name, and total score of the hackers ordered by the descending score. If more than one hacker achieved the same total score, then sort the result by ascending hacker_id. Exclude all hackers with a total score of from your result.
+SELECT temp.id,
+       temp.name,
+       sum(temp.maxscore) as soma
+FROM 
+    (SELECT Hackers.hacker_id as id,
+            Hackers.name as name,
+            Submissions.challenge_id, 
+            max(Submissions.score) as maxscore 
+    FROM Hackers
+    INNER JOIN Submissions ON Submissions.hacker_id = Hackers.hacker_id
+    GROUP BY Hackers.hacker_id, Hackers.name, Submissions.challenge_id
+    HAVING maxscore > 0) as temp
+GROUP BY temp.id, temp.name
+ORDER BY soma DESC, temp.id;
 
 
--- For each pair of city and product, return the names of the city and product, as well the total amount spent on the product to 2 decimal places. Order the result by the amount spent from high to low then by city name and product name in ascending order.
-SELECT city.name, product.name, ROUND(sum(invoice_item.line_total_price), 2) as total
-FROM city
-INNER JOIN customer ON customer.city_id = city.id
-INNER JOIN invoice ON invoice.customer_id = customer.id
-INNER JOIN invoice_item  ON invoice_item.invoice_id = invoice.id
-INNER JOIN product  ON product.id = invoice_item.product_id
-GROUP BY city.name, product.name
-ORDER BY total desc, city.name, product.name;
+-- SQL Project Planning
+-- Write a query to output the start and end dates of projects listed by the number of days it took to complete the project in ascending order. If there is more than one project that have the same number of completion days, then order by the start date of the project.
+SELECT A.Start_Date, MIN(B.End_Date)
+FROM 
+    (SELECT Start_Date FROM Projects WHERE Start_Date NOT IN (SELECT End_Date FROM Projects)) as A,
+    (SELECT End_Date FROM Projects WHERE End_Date NOT IN (SELECT Start_Date FROM Projects)) as B
+WHERE A.Start_Date < B.End_Date
+GROUP BY A.Start_Date
+ORDER BY datediff(A.Start_Date, MIN(B.End_Date)) DESC, A.Start_Date;
+
+
+-- Placements
+-- Write a query to output the names of those students whose best friends got offered a higher salary than them. Names must be ordered by the salary amount offered to the best friends. It is guaranteed that no two students got same salary offer.
+SELECT S1.Name
+FROM Students S1
+INNER JOIN Packages P1 ON P1.ID = S1.ID
+INNER JOIN Friends F  ON F.ID = S1.ID
+INNER JOIN Students S2  ON S2.ID = F.Friend_ID
+INNER JOIN Packages P2 ON P2.ID = S2.ID
+WHERE P2.Salary > P1.Salary
+ORDER BY P2.Salary;
