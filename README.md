@@ -1,8 +1,12 @@
 # SQL-Exercises
-HackerRank BasicSQL 100% <br>
-HackerRank IntermediateSQL 80% <br>
-HackerRank AdvancedSQL 30% <br>
 
-## Database Questions
-Relational Algebra 100%
-OLAP 90%
+## [HackeRank](https://www.hackerrank.com)
+
+### [SQL Exercises](https://www.hackerrank.com/domains/sql)
+* HackerRank BasicSQL (100% completed)
+* HackerRank IntermediateSQL (80% completed)
+* HackerRank AdvancedSQL (30% completed)
+
+### [Database Exercises](https://www.hackerrank.com/domains/databases)
+* Relational Algebra (100% completed)
+* OLAP (90% completed)
