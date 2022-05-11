@@ -170,3 +170,32 @@ INNER JOIN Students S2  ON S2.ID = F.Friend_ID
 INNER JOIN Packages P2 ON P2.ID = S2.ID
 WHERE P2.Salary > P1.Salary
 ORDER BY P2.Salary;
+
+
+-- Symmetric Pairs  
+-- Write a query to output all such symmetric pairs in ascending order by the value of X. List the rows such that X1 ≤ Y1. 
+SELECT f1.X, f1.Y FROM Functions f1
+INNER JOIN Functions f2 ON f1.X=f2.Y AND f1.Y=f2.X
+GROUP BY f1.X, f1.Y
+HAVING COUNT(f1.X)>1 or f1.X<f1.Y
+ORDER BY f1.X;
+
+
+-- Interviews
+-- Samantha interviews many candidates from different colleges using coding challenges and contests. Write a query to print the contest_id, hacker_id, name, and the sums of total_submissions, total_accepted_submissions, total_views, and total_unique_views for each contest sorted by contest_id. Exclude the contest from the result if all four sums are .
+
+contest_id
+hacker_id
+name 
+sum total Submissions
+total_accepted_submissions
+total_views
+total_unique_views for each contest 
+sorted by contest_id
+
+-exclude contest if all 0
+
+
+
+SELECT
+FROM Contents C
